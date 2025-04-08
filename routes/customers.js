@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Customer = require("../models/Customer");
-const Job = require("../models/Job"); 
+const Customer = require("../models/customer");
+const Job = require("../models/job"); 
 const { authMiddleware } = require('../middleware/auth');  // Add this line
 
 
