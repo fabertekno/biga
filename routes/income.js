@@ -1,7 +1,7 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/Expense");  // Make sure this is the correct path to your Expense model
-const Job = require("../models/Job");  // Make sure this is the correct path to your Job model
+const Job = require("../models/job");  // Make sure this is the correct path to your Job model
 
 const router = express.Router();
 
