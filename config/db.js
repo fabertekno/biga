@@ -1,8 +1,10 @@
+require('dotenv').config();  // Load the environment variables
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
     try {
-        // Removed tls/ssl options to let MongoDB Atlas handle it automatically
+        // Ensure MONGO_URI is loaded properly
+        console.log('Mongo URI:', process.env.MONGO_URI);  // Log to check the value
         await mongoose.connect(process.env.MONGO_URI);
         console.log("✅ MongoDB Connected Successfully");
     } catch (error) {
