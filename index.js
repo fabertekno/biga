@@ -18,43 +18,28 @@ app.get("/", (req, res) => {
     res.send("Job Tracking API is running...");
 });
 
-// Import and use the income route
+// Import and use routes
 const incomeRoutes = require("./routes/income");
-app.use("/api/income", incomeRoutes); // Income API setup
-
-// Import and use the jobs route
 const jobRoutes = require("./routes/jobs");
-app.use("/api/jobs", jobRoutes); // Jobs API setup
-
-// Import and use the customer route
 const customerRoutes = require("./routes/customers");
-app.use("/api/customers", customerRoutes); // Customer API setup
-
-// Import and use the authentication route
 const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes); // Authentication API setup
-
-// Import and use the new exchange rate route
 const exchangeRateRoutes = require("./routes/exchangeRate");
-app.use("/api/exchange-rate", exchangeRateRoutes);
-
-// Import and use the expenses route
 const expenseRoutes = require("./routes/expenses");
-app.use("/api/expenses", expenseRoutes); // Expenses API setup
+const invoiceRoutes = require("./routes/invoice");
+
+app.use("/api/income", incomeRoutes); // Income API
+app.use("/api/jobs", jobRoutes); // Jobs API
+app.use("/api/customers", customerRoutes); // Customer API
+app.use("/api/auth", authRoutes); // Authentication API
+app.use("/api/exchange-rate", exchangeRateRoutes); // Exchange rate API
+app.use("/api/expenses", expenseRoutes); // Expenses API
+app.use("/api/invoices", invoiceRoutes); // Invoice API
 
 // Global Error Handling (Prevents crashes on unhandled rejections)
 process.on("unhandledRejection", (err) => {
     console.error("❌ Unhandled Rejection:", err.message);
     process.exit(1);
 });
-
-// Import and use the invoice route
-const invoiceRoutes = require("./routes/invoice");
-app.use("/api/invoices", invoiceRoutes); // Invoice API setup
-
-
-app.use('/api/jobs', require('./routes/jobs'));
-
 
 // Start server with error handling
 try {
