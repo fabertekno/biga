@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({ origin: '*' })); // Allow requests from all origins (you can restrict to specific origins later)
+app.use(cors({ origin: '*' })); // Allow requests from all origins
 app.use(express.json()); // Parse incoming JSON requests
 
 // Connect to MongoDB
@@ -26,6 +26,7 @@ const authRoutes = require("./routes/auth");
 const exchangeRateRoutes = require("./routes/exchangeRate");
 const expenseRoutes = require("./routes/expenses");
 const invoiceRoutes = require("./routes/invoice");
+const balanceRoutes = require("./routes/balances"); // Add this line
 
 app.use("/api/income", incomeRoutes); // Income API
 app.use("/api/jobs", jobRoutes); // Jobs API
@@ -34,6 +35,7 @@ app.use("/api/auth", authRoutes); // Authentication API
 app.use("/api/exchange-rate", exchangeRateRoutes); // Exchange rate API
 app.use("/api/expenses", expenseRoutes); // Expenses API
 app.use("/api/invoices", invoiceRoutes); // Invoice API
+app.use("/api/balances", balanceRoutes); // Add this line for balances API
 
 // Global Error Handling (Prevents crashes on unhandled rejections)
 process.on("unhandledRejection", (err) => {
@@ -47,5 +49,5 @@ try {
         console.log(`🚀 Server is running on port ${PORT}`);
     });
 } catch (error) {
-    console.error("Error starting server:", error); // Log the error if the server fails to start
+    console.error("Error starting server:", error);
 }
