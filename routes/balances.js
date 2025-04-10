@@ -59,14 +59,42 @@ router.put("/current", async (req, res) => {
     });
   }
 });
-// Shipping Total Endpoint
-router.put("/shipping-total", asyncHandler(async (req, res) => {
-  const { amount } = req.body;
-  const balance = await Balance.getSingleton();
-  
-  balance.shippingTotal = amount;
-  await balance.save();
-  res.json({ shippingTotal: balance.shippingTotal });
+// Add this GET endpoint
+router.get("/shipping-total", asyncHandler(async (req, res) => {
+  try {
+    const balance = await Balance.getSingleton();
+    res.json({ 
+      success: true,
+      shippingTotal: balance.shippingTotal || 0
+    });
+  } catch (error) {
+    console.error("Error fetching shipping total:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch shipping total"
+    });
+  }
 }));
 
+// Update the PUT endpoint
+router.put("/shipping-total", asyncHandler(async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const balance = await Balance.getSingleton();
+    
+    balance.shippingTotal = amount;
+    await balance.save();
+    
+    res.json({ 
+      success: true,
+      shippingTotal: balance.shippingTotal
+    });
+  } catch (error) {
+    console.error("Error updating shipping total:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update shipping total"
+    });
+  }
+}));
 module.exports = router;
