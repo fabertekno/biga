@@ -4,13 +4,13 @@ const Balance = require("../models/Balance");
 const router = express.Router();
 
 // Get all balances (including TR USD and Shipping)
-router.get("/", asyncHandler(async (req, res) => {
+router.get("/current", asyncHandler(async (req, res) => {
   const balance = await Balance.getSingleton();
   res.json(balance);
 }));
 
 // TR USD Endpoints
-router.put("/balances/update", asyncHandler(async (req, res) => {
+router.put("/current", asyncHandler(async (req, res) => {
   try {
     const { amount } = req.body; // Only the amount, no history included
     const balance = await Balance.getSingleton();
