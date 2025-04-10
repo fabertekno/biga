@@ -3,58 +3,62 @@ const asyncHandler = require("express-async-handler");
 const Balance = require("../models/Balance");
 const router = express.Router();
 
-// In your balance routes file
-router.get("/current", asyncHandler(async (req, res) => {
+// GET current balance
+router.get("/current", async (req, res) => {
   try {
     const balance = await Balance.getSingleton();
     
-    // Ensure we always return a number
-    const trUSD = typeof balance.trUSD === 'number' ? balance.trUSD : 0;
-    
+    if (!balance) {
+      return res.status(404).json({
+        success: false,
+        message: "Balance record not found"
+      });
+    }
+
     res.json({
       success: true,
-      trUSD: trUSD,
-      // Include other balance fields if needed
+      trUSD: balance.trUSD || 0
     });
+    
   } catch (error) {
-    console.error("Error fetching balances:", error);
-    res.status(500).json({ 
+    console.error("GET balance error:", error);
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message 
+      message: "Failed to fetch balance"
     });
   }
-}));
+});
 
-router.put("/current", asyncHandler(async (req, res) => {
+// UPDATE balance
+router.put("/current", async (req, res) => {
   try {
     const { trUSD } = req.body;
     const amount = parseFloat(trUSD);
-    
+
     if (isNaN(amount)) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "Invalid amount provided" 
+        message: "Invalid amount provided"
       });
     }
 
     const balance = await Balance.getSingleton();
     balance.trUSD = amount;
     await balance.save();
-    
-    res.json({ 
+
+    res.json({
       success: true,
-      trUSD: balance.trUSD 
+      trUSD: balance.trUSD
     });
+
   } catch (error) {
-    console.error("Error updating balance:", error);
-    res.status(500).json({ 
+    console.error("UPDATE balance error:", error);
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
-      error: error.message 
+      message: "Failed to update balance"
     });
   }
-}));
+});
 
 // Shipping Total Endpoint
 router.put("/shipping-total", asyncHandler(async (req, res) => {
