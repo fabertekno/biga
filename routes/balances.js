@@ -8,16 +8,16 @@ router.get("/current", async (req, res) => {
   try {
     const balance = await Balance.getSingleton();
     
-    if (!balance) {
-      return res.status(404).json({
-        success: false,
-        message: "Balance record not found"
-      });
-    }
-
     res.json({
       success: true,
-      trUSD: balance.trUSD || 0
+      balances: {
+        cashTL: balance.cashTL,
+        cashUSD: balance.cashUSD,
+        trUSD: balance.trUSD.amount, // Return just the amount
+        shippingTotal: balance.shippingTotal
+      },
+      // Optional: include recent history
+      recentHistory: balance.trUSD.history.slice(0, 5)
     });
     
   } catch (error) {
@@ -29,7 +29,7 @@ router.get("/current", async (req, res) => {
   }
 });
 
-// UPDATE balance
+// UPDATE TR USD balance
 router.put("/current", async (req, res) => {
   try {
     const { trUSD } = req.body;
@@ -43,23 +43,22 @@ router.put("/current", async (req, res) => {
     }
 
     const balance = await Balance.getSingleton();
-    balance.trUSD = amount;
-    await balance.save();
+    await balance.updateTrUSD(amount);
 
     res.json({
       success: true,
-      trUSD: balance.trUSD
+      trUSD: balance.trUSD.amount,
+      newEntry: balance.trUSD.history[0] // Return the new history entry
     });
 
   } catch (error) {
     console.error("UPDATE balance error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to update balance"
+      message: error.message || "Failed to update balance"
     });
   }
 });
-
 // Shipping Total Endpoint
 router.put("/shipping-total", asyncHandler(async (req, res) => {
   const { amount } = req.body;
