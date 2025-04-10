@@ -10,7 +10,7 @@ router.get("/", asyncHandler(async (req, res) => {
 }));
 
 // TR USD Endpoints
-router.put("/tr-usd", asyncHandler(async (req, res) => {
+router.put("/current", asyncHandler(async (req, res) => {
   try {
     const { amount } = req.body; // Only the amount, no history included
     const balance = await Balance.getSingleton();
