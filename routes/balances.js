@@ -3,30 +3,56 @@ const asyncHandler = require("express-async-handler");
 const Balance = require("../models/Balance");
 const router = express.Router();
 
-// Get all balances (including TR USD and Shipping)
+// In your balance routes file
 router.get("/current", asyncHandler(async (req, res) => {
-  const balance = await Balance.getSingleton();
-  res.json(balance);
-}));
-
-// TR USD Endpoints
-router.put("/current", asyncHandler(async (req, res) => {
   try {
-    const { amount } = req.body; // Only the amount, no history included
     const balance = await Balance.getSingleton();
     
-    if (!balance) {
-      return res.status(404).json({ message: "Balance not found" });
+    // Ensure we always return a number
+    const trUSD = typeof balance.trUSD === 'number' ? balance.trUSD : 0;
+    
+    res.json({
+      success: true,
+      trUSD: trUSD,
+      // Include other balance fields if needed
+    });
+  } catch (error) {
+    console.error("Error fetching balances:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Internal server error",
+      error: error.message 
+    });
+  }
+}));
+
+router.put("/current", asyncHandler(async (req, res) => {
+  try {
+    const { trUSD } = req.body;
+    const amount = parseFloat(trUSD);
+    
+    if (isNaN(amount)) {
+      return res.status(400).json({ 
+        success: false,
+        message: "Invalid amount provided" 
+      });
     }
 
-    // Update TR USD balance as a simple number, similar to cashTL and cashUSD
-    balance.trUSD = amount; // Just store the amount as a number
-
+    const balance = await Balance.getSingleton();
+    balance.trUSD = amount;
     await balance.save();
-    res.json({ trUSD: balance.trUSD }); // Return the updated TR USD balance
+    
+    res.json({ 
+      success: true,
+      trUSD: balance.trUSD 
+    });
   } catch (error) {
-    console.error("Error updating TR USD balance:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error updating balance:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Internal server error",
+      error: error.message 
+    });
   }
 }));
 
