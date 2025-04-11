@@ -97,4 +97,44 @@ router.put("/shipping-total", asyncHandler(async (req, res) => {
     });
   }
 }));
+
+router.get("/total-to-pay", asyncHandler(async (req, res) => {
+  try {
+    const balance = await Balance.getSingleton();
+    res.json({
+      success: true,
+      totalToPay: balance.totalToPay || 0
+    });
+  } catch (error) {
+    console.error("Error fetching totalToPay:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch totalToPay"
+    });
+  }
+}));
+
+
+router.put("/total-to-pay", asyncHandler(async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const balance = await Balance.getSingleton();
+
+    balance.totalToPay = amount;
+    await balance.save();
+
+    res.json({
+      success: true,
+      totalToPay: balance.totalToPay
+    });
+  } catch (error) {
+    console.error("Error updating totalToPay:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update totalToPay"
+    });
+  }
+}));
+
+
 module.exports = router;
