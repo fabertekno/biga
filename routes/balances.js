@@ -118,11 +118,12 @@ router.get("/total-to-pay", asyncHandler(async (req, res) => {
 router.put("/total-to-pay", asyncHandler(async (req, res) => {
   try {
     const { amount } = req.body;
-        console.log("Incoming amount:", amount); // Add this line
+    const numericAmount = Number(amount); // ✅ convert to number
+
+    console.log("Incoming amount:", amount, "Converted:", numericAmount);
 
     const balance = await Balance.getSingleton();
-
-balance.totalToPay = Number(amount);
+    balance.totalToPay = numericAmount;
     await balance.save();
 
     res.json({
@@ -137,6 +138,7 @@ balance.totalToPay = Number(amount);
     });
   }
 }));
+
 
 
 module.exports = router;
