@@ -118,9 +118,11 @@ router.get("/total-to-pay", asyncHandler(async (req, res) => {
 router.put("/total-to-pay", asyncHandler(async (req, res) => {
   try {
     const { amount } = req.body;
+        console.log("Incoming amount:", amount); // Add this line
+
     const balance = await Balance.getSingleton();
 
-    balance.totalToPay = amount;
+balance.totalToPay = Number(amount);
     await balance.save();
 
     res.json({
