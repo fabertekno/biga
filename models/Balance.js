@@ -16,7 +16,9 @@ const balanceSchema = new mongoose.Schema({
     }]
   },
   
-  shippingTotal: { type: Number, default: 0 }
+  shippingTotal: { type: Number, default: 0 },
+  totalToPay: { type: Number, default: 0 }
+
 }, {
   timestamps: true,
   // Add validation
@@ -34,7 +36,8 @@ balanceSchema.statics.getSingleton = async function() {
         amount: 0,
         history: []
       },
-      shippingTotal: 0
+      shippingTotal: 0,
+      totalToPay: 0
     });
   }
   
