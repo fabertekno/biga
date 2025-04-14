@@ -5,10 +5,7 @@
 
 app = "biga"
 primary_region = "iad"
-
-[build]
-  builtin = "node"
-  
+ 
 [http_service]
     internal_port = 3000
   force_https = true
