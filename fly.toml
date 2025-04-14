@@ -1,6 +1,7 @@
-# fly.toml app configuration file generated for biga on 2025-04-13T13:44:09Z
+# fly.toml app configuration file
 
-app = "biga"
+app = "biga"  # This should match your app name on Fly.io
+
 primary_region = "iad"
 
 [http_service]
