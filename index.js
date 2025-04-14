@@ -46,12 +46,7 @@ process.on("unhandledRejection", (err, promise) => {
     process.exit(1);
 });
 
-// Start server with error handling
-try {
-    app.listen(PORT, '0.0.0.0', () => {
+// Start the server outside of try-catch
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`);
 });
-
-} catch (error) {
-    console.error("Error starting server:", error);
-}
