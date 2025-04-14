@@ -1,8 +1,11 @@
 # fly.toml app configuration file
 
-app = "biga"  # This should match your app name on Fly.io
+app = "biga"  # Your Fly.io app name
 
 primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"  # Explicitly pointing to your Dockerfile
 
 [http_service]
   internal_port = 3000
