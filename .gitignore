@@ -1,1 +1,21 @@
+# Ignore .env file
 .env
+
+# Ignore system and temporary files
+**/AppData/
+**/Documents/
+**/Cookies/
+**/Temporary Internet Files/
+**/*.log
+**/*.json
+**/*.bak
+**/*.tmp
+
+# Ignore caches
+.cache/
+.fly/
+
+# Ignore IDE-specific files (e.g., VS Code, IntelliJ)
+.vscode/
+.idea/
+
