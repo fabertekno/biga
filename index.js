@@ -14,8 +14,6 @@ app.use(cors({
   credentials: true // Allow credentials
 }));
 
-app.options('*', cors()); // Ensure preflight OPTIONS requests are handled
-
 
 app.use(express.json()); // Parse incoming JSON requests
 
