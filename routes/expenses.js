@@ -16,7 +16,7 @@ const EXCHANGE_RATE_CACHE_DURATION = 5 * 60 * 1000; // Cache for 5 minutes
 // Helper function to fetch the exchange rate
 async function fetchExchangeRate() {
     try {
-        const res = await fetch("https://biga-1.onrender.com/api/exchange-rate");
+        const res = await fetch("https://biga-ee931785328c.herokuapp.com/api/exchange-rate");
         const data = await res.json();
         return data.rate;
     } catch (error) {
