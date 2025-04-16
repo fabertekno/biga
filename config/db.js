@@ -9,10 +9,7 @@ const connectDB = async () => {
         }
 
         console.log('Mongo URI:', uri); // optional: remove in production
-        await mongoose.connect(uri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        await mongoose.connect(uri); // ✅ no need for options anymore
 
         console.log("✅ MongoDB Connected Successfully");
     } catch (error) {
