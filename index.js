@@ -7,60 +7,50 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({ origin: '*' })); // Allow requests from all origins (you can restrict to specific origins later)
+app.use(cors({
+  origin: 'https://bigasoft.org', // Only allow this domain
+  credentials: true // Allow cookies or sessions if necessary
+}));
+
 app.use(express.json()); // Parse incoming JSON requests
 
 // Connect to MongoDB
-connectDB();
+connectDB().catch((error) => {
+    console.error("❌ MongoDB connection error:", error.message);
+    process.exit(1); // Stop the app if database connection fails
+});
 
 // Test route
 app.get("/", (req, res) => {
     res.send("Job Tracking API is running...");
 });
 
-// Import and use the income route
+// Import and use routes with error handling
 const incomeRoutes = require("./routes/income");
-app.use("/api/income", incomeRoutes); // Income API setup
-
-// Import and use the jobs route
 const jobRoutes = require("./routes/jobs");
-app.use("/api/jobs", jobRoutes); // Jobs API setup
-
-// Import and use the customer route
 const customerRoutes = require("./routes/customers");
-app.use("/api/customers", customerRoutes); // Customer API setup
-
-// Import and use the authentication route
 const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes); // Authentication API setup
-
-// Import and use the new exchange rate route
 const exchangeRateRoutes = require("./routes/exchangeRate");
-app.use("/api/exchange-rate", exchangeRateRoutes);
-
-// Import and use the expenses route
 const expenseRoutes = require("./routes/expenses");
-app.use("/api/expenses", expenseRoutes); // Expenses API setup
+const invoiceRoutes = require("./routes/invoice");
+const balanceRoutes = require("./routes/balances");
+
+app.use("/api/income", incomeRoutes); // Income API
+app.use("/api/jobs", jobRoutes); // Jobs API
+app.use("/api/customers", customerRoutes); // Customer API
+app.use("/api/auth", authRoutes); // Authentication API
+app.use("/api/exchange-rate", exchangeRateRoutes); // Exchange rate API
+app.use("/api/expenses", expenseRoutes); // Expenses API
+app.use("/api/invoices", invoiceRoutes); // Invoice API
+app.use("/api/balances", balanceRoutes); // Balances API
 
 // Global Error Handling (Prevents crashes on unhandled rejections)
-process.on("unhandledRejection", (err) => {
-    console.error("❌ Unhandled Rejection:", err.message);
+process.on("unhandledRejection", (err, promise) => {
+    console.error("❌ Unhandled Rejection at:", promise, "reason:", err);
     process.exit(1);
 });
 
-// Import and use the invoice route
-const invoiceRoutes = require("./routes/invoice");
-app.use("/api/invoices", invoiceRoutes); // Invoice API setup
-
-
-app.use('/api/jobs', require('./routes/jobs'));
-
-
-// Start server with error handling
-try {
-    app.listen(PORT, () => {
-        console.log(`🚀 Server is running on port ${PORT}`);
-    });
-} catch (error) {
-    console.error("Error starting server:", error); // Log the error if the server fails to start
-}
+// Start the server outside of try-catch
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`);
+});

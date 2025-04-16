@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const Expense = require("../models/Expense");
 const Job = require("../models/job");
 const Customer = require("../models/customer");
+const Balance = require("../models/Balance");
 const fetch = require("node-fetch");  // Ensure you're importing node-fetch correctly
 const router = express.Router();
 
@@ -15,7 +16,7 @@ const EXCHANGE_RATE_CACHE_DURATION = 5 * 60 * 1000; // Cache for 5 minutes
 // Helper function to fetch the exchange rate
 async function fetchExchangeRate() {
     try {
-        const res = await fetch("http://localhost:5000/api/exchange-rate");
+        const res = await fetch("https://biga-ee931785328c.herokuapp.com/api/exchange-rate");
         const data = await res.json();
         return data.rate;
     } catch (error) {
@@ -228,6 +229,50 @@ router.delete(
     }
 
     res.json({ message: "Expense deleted successfully" });
+  })
+);
+
+// 🔹 Get current balances
+router.get(
+  "/balances/current",
+  asyncHandler(async (req, res) => {
+    try {
+      // Find or create the balance document (there should only be one)
+      let balances = await Balance.findOne();
+      if (!balances) {
+        balances = new Balance({ cashTL: 0, cashUSD: 0 });
+        await balances.save();
+      }
+      res.json(balances);
+    } catch (error) {
+      console.error("Error fetching balances:", error);
+      res.status(500).json({ error: "Error fetching balances" });
+    }
+  })
+);
+
+// 🔹 Update balances
+router.put(
+  "/balances/update",
+  asyncHandler(async (req, res) => {
+    try {
+      const { cashTL, cashUSD } = req.body;
+      
+      // Find or create the balance document
+      let balances = await Balance.findOne();
+      if (!balances) {
+        balances = new Balance({ cashTL, cashUSD });
+      } else {
+        balances.cashTL = cashTL;
+        balances.cashUSD = cashUSD;
+      }
+      
+      await balances.save();
+      res.json(balances);
+    } catch (error) {
+      console.error("Error updating balances:", error);
+      res.status(500).json({ error: "Error updating balances" });
+    }
   })
 );
 

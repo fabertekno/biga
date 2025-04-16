@@ -78,6 +78,7 @@ async function getCustomerJobs(customerId, page = 1, limit = 5) {
 
 // Login user
 router.post("/login", async (req, res) => {
+        console.log('Request Body:', req.body); // Add this to see what you are receiving
     const { phone, password } = req.body;
 
     if (!phone || !password) {
