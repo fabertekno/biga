@@ -9,8 +9,13 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: 'https://bigasoft.org', // Only allow this domain
-  credentials: true // Allow cookies or sessions if necessary
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true // Allow credentials
 }));
+
+app.options('*', cors()); // Ensure preflight OPTIONS requests are handled
+
 
 app.use(express.json()); // Parse incoming JSON requests
 
