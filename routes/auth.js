@@ -4,7 +4,8 @@ const User = require("../models/user");
 const Job = require("../models/job");  // Add this at the top
 const router = express.Router();
 const { authMiddleware, adminMiddleware } = require("../middleware/auth");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 
 
 // Delete user (Only Admins can delete)
