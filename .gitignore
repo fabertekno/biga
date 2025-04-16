@@ -1,21 +1,27 @@
 # Ignore .env file
 .env
 
-# Ignore system and temporary files
+# Ignore other system files and folders
 **/AppData/
 **/Documents/
 **/Cookies/
-**/Temporary Internet Files/
-**/*.log
-**/*.json
-**/*.bak
-**/*.tmp
+**/Desktop/
+**/Downloads/
+**/Favorites/
+**/Links/
+**/Music/
+**/Pictures/
+**/Saved Games/
+**/Searches/
+**/Videos/
+**/OneDrive/
+**/Contacts/
+**/ntuser.dat*
 
-# Ignore caches
+# Ignore cache and temp files
 .cache/
 .fly/
 
-# Ignore IDE-specific files (e.g., VS Code, IntelliJ)
-.vscode/
-.idea/
-
+# Ignore files that are already tracked but should not be
+.bash_history
+.node_repl_history
