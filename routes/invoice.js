@@ -128,9 +128,9 @@ router.get("/:id/pdf", async (req, res) => {
         const headerY = 140;
         
         // Logo on left
-        doc.image(path.join(__dirname, 'logo', 'logoBigayatay.png'), 40, headerY, { 
-            width: logoWidth
-        });
+        doc.image(path.join(__dirname, 'routes', 'logo.png'), 40, headerY, { 
+    width: logoWidth
+});
 
 // COMPANY INFO (RIGHT SIDE) - WITH PROPER SPACING
 const companyInfoX = doc.page.width - 200;
