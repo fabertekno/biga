@@ -57,6 +57,37 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch invoice" });
     }
 });
+// Fetch a single invoice by ID and send PDF
+router.get("/:id/pdf", async (req, res) => {
+    try {
+        const invoiceId = req.params.id;
+
+        // Fetch the invoice data (if needed for generating PDF)
+        const invoice = await Invoice.findById(invoiceId);
+        if (!invoice) {
+            return res.status(404).json({ error: "Invoice not found" });
+        }
+
+        const mode = req.query.mode || 'download';  // "inline" for print, "download" for download
+        const filePath = path.join(__dirname, 'invoices', `invoice_${invoiceId}.pdf`);
+
+        // Set PDF headers based on mode (inline or download)
+        res.setHeader('Content-Type', 'application/pdf');
+        if (mode === 'inline') {
+            res.setHeader('Content-Disposition', `inline; filename=invoice_${invoiceId}.pdf`);
+        } else {
+            res.setHeader('Content-Disposition', `attachment; filename=invoice_${invoiceId}.pdf`);
+        }
+
+        // Logic for generating the PDF or sending the existing file
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+    } catch (error) {
+        console.error("Error fetching invoice PDF:", error);
+        res.status(500).json({ error: "Failed to fetch invoice PDF" });
+    }
+});
+
 
 router.put("/:id", async (req, res) => {
     try {
