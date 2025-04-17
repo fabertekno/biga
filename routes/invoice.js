@@ -71,15 +71,18 @@ router.get("/:id/pdf", async (req, res) => {
         const mode = req.query.mode || 'download';  // "inline" for print, "download" for download
         const filePath = path.join(__dirname, 'invoices', `invoice_${invoiceId}.pdf`);
 
-        // Set PDF headers based on mode (inline or download)
+        // Set CORS headers to allow the content to be embedded
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Content-Type', 'application/pdf');
+
+        // Set PDF headers based on mode (inline or download)
         if (mode === 'inline') {
             res.setHeader('Content-Disposition', `inline; filename=invoice_${invoiceId}.pdf`);
         } else {
             res.setHeader('Content-Disposition', `attachment; filename=invoice_${invoiceId}.pdf`);
         }
 
-        // Logic for generating the PDF or sending the existing file
+        // Send the PDF file to the client
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
     } catch (error) {
@@ -87,6 +90,7 @@ router.get("/:id/pdf", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch invoice PDF" });
     }
 });
+
 
 
 router.put("/:id", async (req, res) => {
