@@ -63,7 +63,10 @@ router.get("/:id/pdf", async (req, res) => {
         const invoiceId = req.params.id;
         const filePath = path.join(__dirname, 'invoices', `invoice_${invoiceId}.pdf`);
 
+        console.log("File path:", filePath);  // Log the file path for debugging
+
         if (!fs.existsSync(filePath)) {
+            console.error(`File not found: ${filePath}`);  // Log if file does not exist
             return res.status(404).json({ error: "PDF file not found" });
         }
 
@@ -72,14 +75,12 @@ router.get("/:id/pdf", async (req, res) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Content-Type', 'application/pdf');
 
-        // Adjust the disposition based on the mode
         if (mode === 'inline') {
             res.setHeader('Content-Disposition', `inline; filename=invoice_${invoiceId}.pdf`);
         } else {
             res.setHeader('Content-Disposition', `attachment; filename=invoice_${invoiceId}.pdf`);
         }
 
-        // Send the file as a response
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
     } catch (error) {
@@ -87,6 +88,7 @@ router.get("/:id/pdf", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch invoice PDF" });
     }
 });
+
 
 
 
