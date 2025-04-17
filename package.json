@@ -27,4 +27,12 @@
   "devDependencies": {
     "nodemon": "^3.1.9"
   }
+
+  "dependencies": {
+  // ... keep your existing dependencies ...
+  "pdfkit": "^0.16.0",
+  "fontkit": "^1.8.1",       // Required for font handling
+  "png-js": "^1.0.0",        // Required if using images
+  "fs-extra": "^11.2.0"      // Better file system handling
+}
 }
