@@ -128,7 +128,7 @@ router.get("/:id/pdf", async (req, res) => {
         const headerY = 140;
         
         // Logo on left
-        doc.image(path.join(__dirname, 'routes', 'logo.png'), 40, headerY, { 
+        doc.image(path.join(__dirname, 'logo.png'), 40, headerY, { 
     width: logoWidth
 });
 
