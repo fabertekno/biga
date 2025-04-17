@@ -83,12 +83,18 @@ router.get("/:id/pdf", async (req, res) => {
 
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
+
+        // If error occurs during streaming, log it
+        fileStream.on('error', (err) => {
+            console.error("Error streaming file:", err);
+            res.status(500).json({ error: "Failed to stream the PDF file" });
+        });
+
     } catch (error) {
         console.error("Error fetching invoice PDF:", error);
         res.status(500).json({ error: "Failed to fetch invoice PDF" });
     }
 });
-
 
 
 
