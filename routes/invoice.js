@@ -57,44 +57,7 @@ router.get("/:id", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch invoice" });
     }
 });
-// Fetch a single invoice by ID and send PDF
-router.get("/:id/pdf", async (req, res) => {
-    try {
-        const invoiceId = req.params.id;
-        const filePath = path.join(__dirname, 'invoices', `invoice_${invoiceId}.pdf`);
 
-        console.log("File path:", filePath);  // Log the file path for debugging
-
-        if (!fs.existsSync(filePath)) {
-            console.error(`File not found: ${filePath}`);  // Log if file does not exist
-            return res.status(404).json({ error: "PDF file not found" });
-        }
-
-        const mode = req.query.mode || 'download';  // "inline" for print, "download" for download
-
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Content-Type', 'application/pdf');
-
-        if (mode === 'inline') {
-            res.setHeader('Content-Disposition', `inline; filename=invoice_${invoiceId}.pdf`);
-        } else {
-            res.setHeader('Content-Disposition', `attachment; filename=invoice_${invoiceId}.pdf`);
-        }
-
-        const fileStream = fs.createReadStream(filePath);
-        fileStream.pipe(res);
-
-        // If error occurs during streaming, log it
-        fileStream.on('error', (err) => {
-            console.error("Error streaming file:", err);
-            res.status(500).json({ error: "Failed to stream the PDF file" });
-        });
-
-    } catch (error) {
-        console.error("Error fetching invoice PDF:", error);
-        res.status(500).json({ error: "Failed to fetch invoice PDF" });
-    }
-});
 
 
 
