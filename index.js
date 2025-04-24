@@ -9,10 +9,11 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 const corsOptions = {
   origin: 'https://bigasoft.org', // Allow only this domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Add 'PATCH' here
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
   credentials: true // Allow sending cookies/auth headers
 };
+
 
 // Middleware
 app.use(cors(corsOptions));
